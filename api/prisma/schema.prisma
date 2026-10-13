@@ -1,0 +1,21 @@
+generator client {
+  provider = "prisma-client-js"
+  // "linux-musl-openssl-3.0.x" is the engine used inside the Alpine Docker image.
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// One row per patient check-in. The queue is this table ordered by arrival time.
+model Checkin {
+  id        Int      @id @default(autoincrement())
+  cpf       String
+  name      String
+  arrivedAt DateTime @default(now()) @map("arrived_at")
+
+  @@index([arrivedAt])
+  @@map("checkins")
+}
