@@ -10,11 +10,11 @@ web (React)  ──►  api (NestJS)  ──►  mock-service (cadastro de pacie
                        └──►  db (PostgreSQL)
 ```
 
-| Pasta           | O que é                                              |
-|-----------------|------------------------------------------------------|
-| `api/`          | API REST em NestJS + TypeScript + Prisma             |
-| `web/`          | Tela de check-in e fila em React + Vite + TypeScript |
-| `mock-service/` | Serviço externo fornecido (não foi alterado)         |
+| Pasta           | O que é                                                         |
+|-----------------|-----------------------------------------------------------------|
+| `api/`          | API REST em NestJS + TypeScript + Prisma                        |
+| `web/`          | Tela de check-in e fila em React + Vite + TypeScript + Tailwind |
+| `mock-service/` | Serviço externo fornecido (não foi alterado)                    |
 
 ## Como rodar
 
@@ -163,6 +163,7 @@ web/src
 ├── api/checkins.ts            chamadas HTTP para a API
 ├── components/CheckinForm.tsx formulário de CPF
 ├── components/QueueList.tsx   tabela da fila
+├── styles.ts                  classes do Tailwind usadas em mais de um componente
 └── utils/cpf.ts               máscara de digitação do CPF
 ```
 
@@ -208,9 +209,12 @@ filtrar e ordenar a fila.
   uma dependência para fazer uma única chamada HTTP.
 - **Ordem de subida no Docker.** Adicionei um `healthcheck` no banco e a API só inicia
   depois que ele aceita conexões, para as migrations não falharem na primeira subida.
-- **Tela simples, sem bibliotecas extras.** Uma página só, com CSS puro e `useState`.
-  A fila se atualiza sozinha a cada 10 segundos, pensando na tela da recepção que fica
-  aberta o dia todo.
+- **Tela simples.** Uma página só, com `useState` e sem biblioteca de componentes ou de
+  estado. A fila se atualiza sozinha a cada 10 segundos, pensando na tela da recepção
+  que fica aberta o dia todo.
+- **Tailwind CSS para o estilo.** As classes ficam direto no componente, então dá para
+  ver a aparência e a estrutura no mesmo arquivo. As combinações que se repetem (cartão,
+  mensagens de sucesso e erro) ficam em `web/src/styles.ts`.
 
 **Dificuldades**
 

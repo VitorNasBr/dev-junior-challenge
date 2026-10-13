@@ -1,10 +1,15 @@
 import type { Checkin } from '../api/checkins'
+import { card, cardTitle, feedbackError, mutedText } from '../styles'
 
 interface QueueListProps {
   queue: Checkin[]
   loading: boolean
   error: string | null
 }
+
+const headerCell =
+  'border-b border-slate-300 px-2 py-2.5 text-left text-sm font-semibold uppercase text-slate-500'
+const bodyCell = 'px-2 py-2.5'
 
 function formatTime(isoDate: string): string {
   return new Date(isoDate).toLocaleTimeString('pt-BR', {
@@ -15,40 +20,43 @@ function formatTime(isoDate: string): string {
 
 function QueueList({ queue, loading, error }: QueueListProps) {
   return (
-    <section className="card">
-      <h2>
-        Fila de hoje <span className="badge">{queue.length}</span>
+    <section className={card}>
+      <h2 className={cardTitle}>
+        Fila de hoje{' '}
+        <span className="rounded-full bg-teal-700 px-2.5 py-0.5 text-sm text-white">
+          {queue.length}
+        </span>
       </h2>
 
       {error && (
-        <p className="feedback feedback-error" role="alert">
+        <p role="alert" className={`mb-4 ${feedbackError}`}>
           {error}
         </p>
       )}
 
-      {loading && <p className="muted">Carregando fila...</p>}
+      {loading && <p className={mutedText}>Carregando fila...</p>}
 
       {!loading && !error && queue.length === 0 && (
-        <p className="muted">Nenhum check-in realizado hoje.</p>
+        <p className={mutedText}>Nenhum check-in realizado hoje.</p>
       )}
 
       {queue.length > 0 && (
-        <table>
+        <table className="w-full border-collapse">
           <thead>
             <tr>
-              <th>#</th>
-              <th>Paciente</th>
-              <th>CPF</th>
-              <th>Chegada</th>
+              <th className={headerCell}>#</th>
+              <th className={headerCell}>Paciente</th>
+              <th className={headerCell}>CPF</th>
+              <th className={headerCell}>Chegada</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-200">
             {queue.map((checkin, index) => (
               <tr key={checkin.id}>
-                <td>{index + 1}</td>
-                <td>{checkin.name}</td>
-                <td>{checkin.cpf}</td>
-                <td>{formatTime(checkin.arrivedAt)}</td>
+                <td className={bodyCell}>{index + 1}</td>
+                <td className={bodyCell}>{checkin.name}</td>
+                <td className={bodyCell}>{checkin.cpf}</td>
+                <td className={bodyCell}>{formatTime(checkin.arrivedAt)}</td>
               </tr>
             ))}
           </tbody>
